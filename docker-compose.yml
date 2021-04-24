@@ -1,0 +1,22 @@
+version: '3.3'
+
+services:
+  nextcloud:
+    image: nextcloud:fpm-alpine
+    volumes:
+      - ./nextcloud:/var/www/html
+    restart: always
+
+  caddy:
+    image: caddy
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - nextcloud
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy:/data
+    volumes_from:
+      - nextcloud
+    restart: always
